@@ -9,12 +9,23 @@
   };
   firebase.initializeApp(config);
 
-$("#submit").on("click", function(event) { 
+  var database = firebase.database();
 
-    var employeeName = $('#employeeNameValue').val().trim();
-    var role = $('#roleValue').val().trim();
-    var startDate = $('#startDateValue').val().trim();
-    var monthlyRate = $('#rateValue').val().trim();
+$("#submitBnt").on("click", function(event) { 
+
+    event.preventDefault();
+   
+    var employeeName = $('#name').val().trim();
+    var role = $('#role').val().trim();
+    var startDate = $('#startDate').val().trim();
+    var monthlyRate = $('#monthlyRate').val().trim();
+
+    database.ref("/Employee").push({
+        name: employeeName,
+        role: role,
+        startDate: startDate,
+        monthlyRate: monthlyRate
+    });
     
     var employeeRow = $("<tr>");
 
@@ -32,7 +43,7 @@ $("#submit").on("click", function(event) {
 
     // var currentDate =     
     var monthsWorked = $('td');
-        monthsworked.text('a bunch');
+        monthsWorked.text('a bunch');
 
     var totalBilled = $('td');
         totalBilled.text('a lot');
@@ -48,4 +59,27 @@ $("#submit").on("click", function(event) {
     
 });
 
+database.ref().orderByChild("Employee").on("child_added", function(snapshot) {
+// database.ref("/Employee").on("value", function(snapshot) {
 
+    // highBidder = snapshot.val().highBidder;
+    // highPrice = parseInt(snapshot.val().highPrice);
+    // debugger;
+
+    console.log('firebase.database', firebase.database)
+    console.log(snapshot.val())
+ 
+
+    var sv = snapshot.val();
+
+     // Console.loging the last user's data
+     console.log(sv.name);
+     console.log(sv.role);
+     console.log(sv.startDate);
+     console.log(sv.monthlyRate);
+
+    for (i = 0; i< snapshot.val().length; i++) {
+        console.log(snapshot.val()[i])
+    }
+
+});
